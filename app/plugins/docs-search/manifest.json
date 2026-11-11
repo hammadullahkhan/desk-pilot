@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "docs-search",
+  "name": "Docs Search",
+  "version": "1.0.0",
+  "hostRange": ">=0.1.0 <1.0.0",
+  "capabilities": ["retrieval"],
+  "collections": ["product-docs"]
+}

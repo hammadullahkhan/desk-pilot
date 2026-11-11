@@ -1,0 +1,36 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: app } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: app/package-lock.json }
+      - run: npm ci
+      - run: npm run check
+
+  sidecar:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: sidecar } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
+  e2e:
+    needs: [app, sidecar]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e "./sidecar"
+      - run: cd app && npm ci
+      - run: cd app && DESK_PILOT_PYTHON=python xvfb-run -a npm run e2e

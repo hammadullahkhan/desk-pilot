@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "meeting-notes",
+  "name": "Meeting Notes Summarizer",
+  "version": "0.2.0",
+  "hostRange": ">=0.1.0 <1.0.0",
+  "capabilities": ["retrieval", "prompt-template"],
+  "promptTemplate": "Summarize the relevant notes as action items with owners.",
+  "collections": ["meeting-notes"]
+}
