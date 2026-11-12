@@ -34,3 +34,9 @@ jobs:
       - run: pip install -e "./sidecar"
       - run: cd app && npm ci
       - run: cd app && DESK_PILOT_PYTHON=python xvfb-run -a npm run e2e
+        env:
+          # Ubuntu 24.04+ runners block unprivileged user namespaces via AppArmor,
+          # so Chromium's sandbox makes Electron exit at launch. Disable it in CI only.
+          ELECTRON_DISABLE_SANDBOX: "1"
+          # Surface Electron's own stderr if launch still fails.
+          DEBUG: pw:browser
